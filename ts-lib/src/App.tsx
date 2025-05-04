@@ -4,19 +4,38 @@ import './App.css'
 
 function App() {
   const [url, setUrl] = useState(() => Store.get('url') || '')
+  const [token, setToken] = useState(() => Store.get('token') || '')
 
   useEffect(() => {
     Store.set('url', url)
   }, [url])
 
+  useEffect(() => {
+    Store.set('token', token)
+  }, [token])
+
   return (
     <>
-      <input
-        type="text"
-        value={url}
-        onChange={e => setUrl(e.target.value)}
-        placeholder="Enter URL"
-      />
+      <div>
+        <label htmlFor="url-input">URL:</label>
+        <input
+          id="url-input"
+          type="text"
+          value={url}
+          onChange={e => setUrl(e.target.value)}
+          placeholder="Enter URL"
+        />
+      </div>
+      <div>
+        <label htmlFor="token-input">Token:</label>
+        <input
+          id="token-input"
+          type="text"
+          value={token}
+          onChange={e => setToken(e.target.value)}
+          placeholder="Enter Token"
+        />
+      </div>
     </>
   )
 }
