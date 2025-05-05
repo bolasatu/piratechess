@@ -2,6 +2,7 @@ import axios from 'axios';
 import {SHA512} from 'crypto-js';
 import {Store} from './Store';
 import {AuthUtils} from './AuthUtils';
+import { proxyUrl } from './requestUtils';
 
 /**
  * Computes a SHA-512 hash of the input string
@@ -21,7 +22,6 @@ function extractUidFromToken(token: string): string {
     return AuthUtils.extractUidFromToken(token);
 }
 
-const proxyUrl = 'http://localhost:8880/' //http://cors-anywhere.herokuapp.com/' // Replace with your proxy URL
 export async function login(emailInput: string, pwdInput: string): Promise<string> {
     if (!emailInput) {
         return "please fill out email.";
