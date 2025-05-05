@@ -1,6 +1,7 @@
 import axios from 'axios';
-import { SHA512 } from 'crypto-js';
-import { jwtDecode } from 'jwt-decode';
+import {SHA512} from 'crypto-js';
+import {Store} from './Store';
+import {AuthUtils} from './AuthUtils';
 
 /**
  * Computes a SHA-512 hash of the input string
@@ -12,20 +13,12 @@ function computeSha512Hash(input: string): string {
 }
 
 /**
- * Extracts the user ID from a JWT token
+ * Extracts the user ID from a JWT token following the same logic as JwtHelper.cs
  * @param token - The JWT token
  * @returns The user ID extracted from the token
  */
 function extractUidFromToken(token: string): string {
-    try {
-        const decoded: any = jwtDecode(token);
-        // The uid is typically in the 'sub' claim or in a custom claim
-        // Adjust the property name based on the actual structure of your JWT
-        return decoded.uid || decoded.sub || '';
-    } catch (error) {
-        console.error('Error decoding JWT token:', error);
-        return '';
-    }
+    return AuthUtils.extractUidFromToken(token);
 }
 
 const proxyUrl = 'http://localhost:8880/' //http://cors-anywhere.herokuapp.com/' // Replace with your proxy URL
@@ -38,7 +31,6 @@ export async function login(emailInput: string, pwdInput: string): Promise<strin
     }
 
     const hash = computeSha512Hash(pwdInput);
-  debugger
     if (hash !== "857f0e74d24470aeb50ec2762a30f875d809ee709d06925e490608cc956594f4c86064267ed9c9b3b3b02e6532264f7fb924871412205d8050968dae73fac9fa") {
         throw new Error("Hash does not match '");
     }
@@ -57,7 +49,7 @@ export async function login(emailInput: string, pwdInput: string): Promise<strin
     };
 
     try {
-        const response = await axios.post(proxyUrl+'https://www.chessable.com/api/v1/authenticate', requestBody, {
+        const response = await axios.post(proxyUrl + 'https://www.chessable.com/api/v1/authenticate', requestBody, {
             headers: {
                 'Content-Type': 'application/json',
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:138.0) Gecko/20100101 Firefox/138.0'
@@ -69,15 +61,17 @@ export async function login(emailInput: string, pwdInput: string): Promise<strin
         }
 
         const responseLogin = response.data;
-
+        debugger
         if (responseLogin && responseLogin.jwt) {
             const bearer = responseLogin.jwt;
             const uid = extractUidFromToken(bearer);
-            
+
             console.log('Extracted UID:', uid);
-            
-            // Store bearer and uid as needed
-            // You can return the uid or store it as required
+
+            // Store bearer and uid using the Store class
+            Store.set('jwt_token', bearer);
+            Store.set('user_id', uid);
+
             return uid;
         }
 
