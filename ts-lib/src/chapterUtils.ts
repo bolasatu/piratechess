@@ -33,7 +33,7 @@ interface Chapter {
     id: number;
 }
 
-interface ResponseChapter {
+export interface ResponseChapter {
     list: ResponseList;
 }
 

@@ -1,7 +1,7 @@
 import {Method} from 'axios';
 import {makeRequest} from './requestUtils';
 import {AuthUtils} from "./AuthUtils.ts";
-import {downloadChapter} from './chapterUtils';
+import {downloadChapter, ResponseChapter} from './chapterUtils';
 
 // Model interfaces
 interface ResponseCourse {
@@ -14,16 +14,39 @@ interface Course {
 
 export interface Chapter {
     id: number;
-    title:string;
+    title: string;
 }
 
 // Event callback types
 type ChapterCounterCallback = (message: string) => void;
 type LineCounterCallback = (message: string) => void;
 
+// chapterUtils
+export async function getChapter(
+    bid: string, chapterId: number
+) {
+    const uid = AuthUtils.getUserId()
+    debugger
+    if (!uid) {
+        throw new Error('User ID is missing. Please log in first.');
+    }
+    const url = `https://www.chessable.com/api/v1/getList?uid=${uid}&bid=${bid}&lid=${chapterId}`;
+    try {
+        debugger
+        const chapterData = await makeRequest(url, 'GET' as Method) as ResponseChapter;
+        for (const _line of chapterData.list.data) {
+        }
+        } catch (error) {
+        console.error('Error fetching chapter:', error);
+        return '';
+    }
+
+}
+
+
 export async function getCourseChapters(
     bid: string,
-) :Promise<Chapter[]>{
+): Promise<Chapter[]> {
     const uid = AuthUtils.getUserId()
     debugger
     if (!uid) {

@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {getCourse, getCourseChapters, Chapter} from "../courseUtils.ts";
+import {getCourse, getCourseChapters, Chapter, getChapter} from "../courseUtils.ts";
 
 
 interface CourseListProps {
@@ -79,7 +79,7 @@ const CourseList: React.FC<CourseListProps> = ({courses}) => {
     };
 
     const handleGetChapter = async (bid: string, chapterId: number) => {
-
+        await getChapter(bid,chapterId)
 
     }
     if (Object.keys(courses).length === 0) return null;
