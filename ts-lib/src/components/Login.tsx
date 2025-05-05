@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import {login} from "../login.ts";
 
 const initialUsername = 'danny@bobmail.info';
 const initialPassword = 'junky888';
@@ -7,9 +8,10 @@ const Login: React.FC = () => {
   const [username, setUsername] = useState(initialUsername);
   const [password, setPassword] = useState(initialPassword);
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     console.log('Login submitted:', { username, password });
+    await login(username,password)
     // Add your login logic here
   };
 
