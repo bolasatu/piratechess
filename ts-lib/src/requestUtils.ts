@@ -4,7 +4,7 @@ export const proxyUrl = 'http://localhost:8880/' //http://cors-anywhere.herokuap
 
 
 export async function makeRequest(url: string,  method: Method): Promise<any> {
-    debugger
+
     const bearer = Store.get('jwt_token') || ''; // Retrieve the token from the Store class
     if (!bearer) {
         throw new Error('Bearer token is missing. Please log in first.');

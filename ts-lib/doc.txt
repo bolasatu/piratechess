@@ -1,0 +1,12 @@
+
+chapters  these are courses you bought
+
+  each courses has book id bid
+
+
+
+course data from getCourse()
+
+courseData.course.data
+ has Chapter
+
